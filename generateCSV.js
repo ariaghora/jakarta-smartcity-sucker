@@ -65,7 +65,7 @@ if (filename === undefined) {
         })
 
         // sort by initiation time
-        flattenData = _.sortBy(flattenData, ['id', 'timestamp'])
+        flattenData = _.sortBy(flattenData, ['case_id', 'timestamp'])
 
         // convert to csv and store to file
         var csv = json2csv({data:flattenData})
