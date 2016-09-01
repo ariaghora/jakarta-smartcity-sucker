@@ -4,6 +4,7 @@ const requestSync = require('sync-request')
 const chalk = require('chalk')
 const jsonfile = require('jsonfile')
 const ProgressBar = require('progress');
+const path = require('path');
 const _ = require('lodash')
 
 var markerData = []
@@ -21,11 +22,11 @@ const urlListHistoryProgress = 'http://services.qluein.org/web_list_history_prog
 /**
  * sucker entry point
  */
-console.log(`fetching started (${chalk.green(new Date())})`);
-console.log('retrieving Qlue report data...')
+console.log(`Operation started (${chalk.green(new Date())})`);
+console.log('Retrieving Qlue report data...')
 request(urlMarker, function(err, res, body) {
     if (err) {
-        console.log(chalk.red('error fetching data'))
+        console.log(chalk.red('Error fetching data'))
     }
 
     // filter cases by "complete" status
@@ -34,9 +35,15 @@ request(urlMarker, function(err, res, body) {
     var completeCase = markerData.filter(x=>x.profile.detail.status === "complete")
     var inProgressCase = markerData.filter(x=>x.profile.detail.status === "process")
     var pendingCase = markerData.filter(x=>x.profile.detail.status === "wait")
+    console.log('All report data retreved. Followings are the statistics:');
+    console.log(`Complete case: ${completeCase.length}`);
+    console.log(`In-progress case: ${inProgressCase.length}`);
+    console.log(`Pending case: ${pendingCase.length}`);
+    console.log(`Total case: ${markerData.length}\n`);
 
     // merge complete case data with completion history data
-    console.log('processing and merging...')
+    console.log('Now processing and merging all report data with follow-up history data.')
+    console.log('It takes a while. Enjoy your coffee while waiting.')
     var bar = new ProgressBar('[:bar] (:percent) ', {
         total:completeCase.length,
         complete: '=',
@@ -50,20 +57,16 @@ request(urlMarker, function(err, res, body) {
         return o
     })
 
-    console.log(`complete case: ${completeCase.length}`);
-    console.log(`in-progress case: ${inProgressCase.length}`);
-    console.log(`pending case: ${pendingCase.length}`);
-    console.log(`total case: ${markerData.length}`);
-    console.log(`fetching finished (${chalk.green(new Date())})`);
-
     // var filename = "data/" + (new Date()) + ".json"
     var filename = "data/latest.json"
 
     // save filtered data
     jsonfile.writeFile(filename, completeCase, function(err) {
         if (err) {
-            console.log(chalk.red('error writing file'))
+            console.log(chalk.red('Error writing file'))
+        } else {
+          console.log('Merging completed. Data saved to ' + chalk.green(filename));
+          console.log(`All opreations finished (${chalk.green(new Date())})`);
         }
-        console.log('data saved to ' + chalk.yellow(filename));
     })
 })
