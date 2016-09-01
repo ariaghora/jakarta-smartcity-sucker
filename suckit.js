@@ -5,6 +5,7 @@ const chalk = require('chalk')
 const jsonfile = require('jsonfile')
 const ProgressBar = require('progress');
 const path = require('path');
+const readline = require('readline-sync');
 const _ = require('lodash')
 
 var markerData = []
@@ -43,6 +44,17 @@ request(urlMarker, function(err, res, body) {
 
     // merge complete case data with completion history data
     console.log('Now processing and merging all report data with follow-up history data.')
+    var answer = readline.question('Enter a least case id of data to download.\nLeave blank to fetch all data: ')
+    if (parseInt(answer) !== NaN) {
+        completeCase = completeCase.filter(x=>x.id > answer)
+    } else {
+        console.log('Invalid case id');
+        process.exit()
+
+    }
+
+    console.log(completeCase);
+
     console.log('It takes a while. Enjoy your coffee while waiting.')
     var bar = new ProgressBar('[:bar] (:percent) ', {
         total:completeCase.length,
