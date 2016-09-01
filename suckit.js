@@ -50,10 +50,7 @@ request(urlMarker, function(err, res, body) {
     } else {
         console.log('Invalid case id');
         process.exit()
-
     }
-
-    console.log(completeCase);
 
     console.log('It takes a while. Enjoy your coffee while waiting.')
     var bar = new ProgressBar('[:bar] (:percent) ', {

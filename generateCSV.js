@@ -1,8 +1,9 @@
 const fs = require('fs')
 const jsonfile = require('jsonfile')
 const async = require('async')
-const _ = require('lodash')
+const readline = require('readline-sync');
 const json2csv = require('json2csv')
+const _ = require('lodash')
 
 filename = process.argv[2]
 var data = []
@@ -73,7 +74,18 @@ if (filename === undefined) {
             if (err) {
                 throw err
             }
-            console.log('CSV file saved to "data/latest.csv"');
+            console.log(csv)
+            console.log('CSV file saved to "data/latest.csv"')
+
+            var answer = readline.question('Want to append to main dataset? (y/n) ')
+            if (answer.toUpperCase() === 'Y') {
+                fs.appendFile('data/data_all.csv', csv, function(err) {
+                    if (err) {
+                        throw err
+                    }
+                    console.log('Operation finished');
+                })
+            }
         })
         cb()
     }
