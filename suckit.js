@@ -16,6 +16,7 @@ var markerData = []
 const urlMarker = 'http://services.qluein.org/qluein_marker_v3.php'
 
 /**
+ * history progress has to be downloaded separately with respective pid. Pretty inconvenient.
  * params: pid
  */
 const urlListHistoryProgress = 'http://services.qluein.org/web_list_history_progress.php?pid='
