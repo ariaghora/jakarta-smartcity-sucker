@@ -74,12 +74,17 @@ if (filename === undefined) {
             if (err) {
                 throw err
             }
-            console.log(csv)
+
+            // remove unnecessary first line (which is the CSV header) for easier appending
+            var n = csv.split('\n')
+            n.shift()
+            var newCsv = n.join('\n')
+
             console.log('CSV file saved to "data/latest.csv"')
 
             var answer = readline.question('Want to append to main dataset? (y/n) ')
             if (answer.toUpperCase() === 'Y') {
-                fs.appendFile('data/data_all.csv', csv, function(err) {
+                fs.appendFile('data/data_all.csv', '\n'+newCsv, function(err) {
                     if (err) {
                         throw err
                     }
